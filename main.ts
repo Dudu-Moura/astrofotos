@@ -15,11 +15,11 @@ app.get('/health', (req: Request, res: Response) => {
 app.post('/photo', upload.single('photo'),(req: Request, res: Response) => {
     console.log(req.file);
     res.json({ file: req.file?.filename });
-})
+});
 
 app.get('/photo', (req: Request, res: Response) => {
     const photo = fs.readFileSync('.uploads/9236b836b0fc0e431f561987a18e9d59');
-    res.type('jpeg')
+    res.type(`jpeg`)
     res.send(photo);
 })
 
