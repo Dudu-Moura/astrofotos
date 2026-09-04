@@ -1,6 +1,9 @@
 import express, { type Express, type Request, type Response} from 'express'
 import multer from 'multer';
 import fs from 'node:fs' 
+import { instance } from './db/instance.db.js';
+import { photos } from './db/schema.js';
+
 
 const upload = multer({ dest: '.uploads/'})
 const app: Express = express();
@@ -12,13 +15,27 @@ app.get('/health', (_: Request, res: Response) => {
     res.send({ status: 'ok' });
 })
 
-app.post('/photo', upload.single('photo'),(req: Request, res: Response) => {
+app.post('/photo', upload.single('photo'),async (req: Request, res: Response) => {
     console.log(req.file);
+
+   try{ await instance.database
+    .insert(photos)
+    .values({
+        originalName: req.file!.originalname,
+        fileName: req.file!.filename,
+        mimeType: req.file!.mimetype,
+        size: req.file!.size,
+        path: req.file!.path,
+    });}
+    catch(error) {
+        console.error(error);
+    }
+
     res.json({ file: req.file?.filename });
 });
 
 app.get('/photo', (_: Request, res: Response) => {
-    const photo = fs.readFileSync('.uploads/9236b836b0fc0e431f561987a18e9d59');
+    const photo = fs.readFileSync('.uploads/3d81f7295dd39c71d0493970a3729603');
     res.type(`jpeg`)
     res.send(photo);
 })
