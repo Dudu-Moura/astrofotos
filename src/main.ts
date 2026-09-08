@@ -3,6 +3,7 @@ import multer from 'multer';
 import fs from 'node:fs' 
 import { instance } from './db/instance.db.js';
 import { photos } from './db/schema.js';
+import { eq } from 'drizzle-orm';
 
 
 
@@ -45,9 +46,28 @@ app.post('/photo', upload.single('photo'), async (req: Request, res: Response) =
 });
 
 app.get('/photo', (_: Request, res: Response) => {
-    const photo = fs.readFileSync('.uploads/3d81f7295dd39c71d0493970a3729603');
-    res.type(`jpeg`)
+    const photo = fs.readFileSync('.uploads/');
+    res.type(`jpeg`) 
     res.send(photo);
+})
+
+app.get('/photo/:id', async (req: Request, res: Response) => {
+    const photoDB = await instance.database
+    .select( { fileName: photos.fileName, mimeType: photos.mimeType } )
+    .from(photos)
+    .where(eq(photos.fileName, String(req.params.id)));
+
+    console.log(photoDB[0]?.fileName);
+
+    const photo = fs.readFileSync(`.uploads/${photoDB[0]?.fileName}`);
+    try{
+        res.type(photoDB[0]!.mimeType).send(photo);
+    } catch(err){
+        if(err instanceof Error){
+            console.error(err.message);
+        }
+        console.error(err);
+    };
 })
 
 
