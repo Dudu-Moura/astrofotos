@@ -18,9 +18,6 @@ const upload = multer({ dest: '.uploads/', fileFilter: (_, file, cb) => {
     }
 } })
 
-
-type ImageStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED'
-
 app.get('/health', (_: Request, res: Response) => {
     res.send({ status: 'ok' });
 })

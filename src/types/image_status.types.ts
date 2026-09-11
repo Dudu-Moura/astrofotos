@@ -1,0 +1,1 @@
+export type ImageStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED'
