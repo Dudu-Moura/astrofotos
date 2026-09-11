@@ -1,5 +1,5 @@
 import { PhotoRepository } from "../repository/photo.repository.js";
-import type { Photo } from "../types/photo.types.js";
+import type { NewPhoto, Photo } from "../types/photo.types.js";
 
 export class PhotoService {
     constructor(private photoRepository: PhotoRepository){};
@@ -8,11 +8,20 @@ export class PhotoService {
         return this.photoRepository.findAll();
     }
 
-    getPhotoById = async (id: string) => {
-        return this.photoRepository.findOne(id)
+    getPhotoById = async (id: string): Promise<Photo> => {
+        const [photo] = await this.photoRepository.findOne(id);
+
+        if(!photo){
+            console.error(`Photo does not exist ${id}`);
+            throw new Error(`Photo does not exits`);
+        }
+
+        return photo;
     }
 
     createPhoto = async (photo: Photo) => {
-        return this.photoRepository.create(photo);
+        const photoDB = await this.photoRepository.create(photo);
+
+        return photoDB;
     }
 }

@@ -14,7 +14,7 @@ export class PhotoRepository {
         return await instance.database
         .select()
         .from(photos)
-        .where(eq(photos.fileName , id))
+        .where(eq(photos.id , id))
     }
 
     create = async (photo: Photo) => {
@@ -28,6 +28,7 @@ export class PhotoRepository {
                 size: photo.size,
                 path: photo.path,
             })
+            .returning()
         }
         catch(err){
             if(err instanceof Error){
