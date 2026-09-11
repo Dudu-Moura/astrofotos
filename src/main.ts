@@ -22,7 +22,7 @@ const upload = multer({ dest: '.uploads/', fileFilter: (_, file, cb) => {
 type ImageStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED'
 
 app.get('/health', (_: Request, res: Response) => {
-    res.send({ status: 'ok' });
+    res.send({ status: 'ok, testing dev' });
 })
 
 app.post('/photo', upload.single('photo'), async (req: Request, res: Response) => {
