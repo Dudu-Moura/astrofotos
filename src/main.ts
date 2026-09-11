@@ -4,8 +4,10 @@ import fs from 'node:fs'
 import { instance } from './db/instance.db.js';
 import { photos } from './db/schema.js';
 import { eq } from 'drizzle-orm';
+import exifr from 'exifr'
 
-
+const app: Express = express();
+const port = 3000
 
 const upload = multer({ dest: '.uploads/', fileFilter: (_, file, cb) => {
     if(file.mimetype.substring(0,5) !== 'image'){
@@ -16,8 +18,6 @@ const upload = multer({ dest: '.uploads/', fileFilter: (_, file, cb) => {
     }
 } })
 
-const app: Express = express();
-const port = 3000
 
 type ImageStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED'
 
@@ -27,7 +27,6 @@ app.get('/health', (_: Request, res: Response) => {
 
 app.post('/photo', upload.single('photo'), async (req: Request, res: Response) => {
     console.log(req.file);
-
         try{ await instance.database
             .insert(photos)
             .values({
@@ -52,12 +51,15 @@ app.get('/photo', (_: Request, res: Response) => {
 })
 
 app.get('/photo/:id', async (req: Request, res: Response) => {
+
     const photoDB = await instance.database
     .select( { fileName: photos.fileName, mimeType: photos.mimeType } )
     .from(photos)
     .where(eq(photos.fileName, String(req.params.id)));
 
     console.log(photoDB[0]?.fileName);
+    const output = await exifr.parse(`.uploads/${photoDB[0]?.fileName}`);
+    console.log(output);
 
     const photo = fs.readFileSync(`.uploads/${photoDB[0]?.fileName}`);
     try{
