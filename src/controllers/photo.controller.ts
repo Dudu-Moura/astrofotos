@@ -52,4 +52,19 @@ export class PhotoController {
 
         res.status(201).json({ message: `Image created -  ${JSON.stringify(photo)}`});
     }
+
+    createMultiplePhotos = async (req: Request, res: Response, _: NextFunction) => {
+        const files = req.files as Express.Multer.File[];
+        const photos = files.map(f => ({
+            path: f.path,
+            originalName: f.originalname,
+            fileName: f.filename,
+            mimeType: f.mimetype,
+            size: f.size,
+        }));
+
+        await this.photoService.createMultiplePhotos(photos);
+
+        res.status(201).json({ message: `${photos.length} images created` });
+    }
 }

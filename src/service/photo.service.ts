@@ -23,4 +23,9 @@ export class PhotoService {
         await this.photoRepository.create(photo);
         return;
     }
+
+    createMultiplePhotos = async (photos: NewPhoto[]) => {
+        await this.photoRepository.createMultiple(photos);
+        return;
+    }
 }

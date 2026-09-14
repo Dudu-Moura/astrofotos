@@ -37,4 +37,18 @@ export class PhotoRepository {
             console.error(`An unexpected database error ocurred`);
         }
     }
+
+    createMultiple = async (newPhotos: NewPhoto[]) => {
+        try{
+            return await instance.database
+            .insert(photos)
+            .values(newPhotos)
+        }
+        catch(err){
+            if(err instanceof Error){
+                console.error(`ERROR: ${err.message}`);
+            }
+            console.error(`An unexpected database error ocurred`);
+        }
+    }
 }
