@@ -21,7 +21,7 @@ export class PhotoController {
         const readPhoto = fs.readFileSync(photo.path);
 
         res.status(200).json({
-            photo: readPhoto, 
+            photo: readPhoto.toString('base64'), 
             data: metadata,
             mimeType: photo.mimeType
         });
