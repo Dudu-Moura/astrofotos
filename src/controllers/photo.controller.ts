@@ -1,14 +1,25 @@
 import type { Request, Response, NextFunction } from "express";
 import type { PhotoService } from "../service/photo.service.js";
 import type { Photo } from "../types/photo.types.js";
-import fs from 'node:fs';
+import fs, { readFileSync } from 'node:fs';
 import exifr from 'exifr'
+import path from "node:path";
 
 export class PhotoController {
     constructor(private photoService: PhotoService){};
 
     getPhoto = async (req: Request, res: Response, next: NextFunction) => {
         const photos = await this.photoService.getPhotos();
+
+        const metadatas = await Promise.all(photos.map(p => exifr.parse(`${p.path}`)));
+
+        const readFiles = photos.map(p => readFileSync(p.path));
+        res.status(200).json({
+            photos: readFiles.map(rF => rF.toString('base64')),
+            metadatas: metadatas,
+            mimeType: photos.map(p => p.mimeType)
+        })
+
     }
 
     getPhotoById = async (req: Request, res: Response, _: NextFunction) => {
