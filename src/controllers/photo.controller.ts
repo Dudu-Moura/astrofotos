@@ -20,7 +20,11 @@ export class PhotoController {
 
         const readPhoto = fs.readFileSync(photo.path);
 
-        res.status(200).type(photo.mimeType).send({photo: readPhoto, data: metadata});
+        res.status(200).json({
+            photo: readPhoto, 
+            data: metadata,
+            mimeType: photo.mimeType
+        });
     }
 
     createPhoto = async (req: Request, res: Response, _: NextFunction) => {
