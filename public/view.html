@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>AstroFotos - Ver foto</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 480px;
+      margin: 40px auto;
+      padding: 0 16px;
+      color: #222;
+    }
+    h1 { font-size: 1.4rem; }
+    form {
+      display: flex;
+      gap: 8px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    input {
+      flex: 1;
+      padding: 8px;
+    }
+    button {
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    #photo {
+      max-width: 100%;
+      margin-top: 16px;
+      display: none;
+      border-radius: 8px;
+    }
+    #result {
+      margin-top: 16px;
+      white-space: pre-wrap;
+      background: #f4f4f4;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 0.85rem;
+      display: none;
+    }
+    #result.error {
+      background: #fdecea;
+      color: #611a15;
+    }
+  </style>
+</head>
+<body>
+  <h1>Buscar foto por id</h1>
+  <form id="search-form">
+    <input type="text" id="photo-id" placeholder="id da foto" required />
+    <button type="submit">Buscar</button>
+  </form>
+  <img id="photo" alt="Foto" />
+  <pre id="result"></pre>
+
+  <script>
+    const form = document.getElementById('search-form');
+    const idInput = document.getElementById('photo-id');
+    const photoEl = document.getElementById('photo');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const id = idInput.value.trim();
+      if (!id) return;
+
+      photoEl.style.display = 'none';
+      result.style.display = 'block';
+      result.classList.remove('error');
+      result.textContent = 'Buscando...';
+
+      try {
+        const response = await fetch(`/photo/${id}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Erro ao buscar a foto');
+        }
+
+        photoEl.src = `data:${data.mimeType};base64,${data.photo}`;
+        photoEl.style.display = 'block';
+        result.textContent = JSON.stringify(data.data, null, 2);
+      } catch (error) {
+        result.classList.add('error');
+        result.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>

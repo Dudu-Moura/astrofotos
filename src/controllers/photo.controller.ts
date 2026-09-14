@@ -35,6 +35,6 @@ export class PhotoController {
 
         await this.photoService.createPhoto(photo);
 
-        res.status(201).json({ message: 'Image created', photo });
+        res.status(201).json({ message: `Image created -  ${JSON.stringify(photo)}`});
     }
 }
