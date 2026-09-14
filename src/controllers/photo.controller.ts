@@ -23,8 +23,17 @@ export class PhotoController {
         res.status(200).type(photo.mimeType).send({photo: readPhoto, data: metadata});
     }
 
-    createPhoto = async (req: Request<{}, {}, Photo>, res: Response, _: NextFunction) => {
-        const photo = await this.photoService.createPhoto(req.body);
+    createPhoto = async (req: Request, res: Response, _: NextFunction) => {
+        const file = req.file!;
+        const photo = {
+            path: file.path,
+            originalName: file.originalname,
+            fileName: file.filename,
+            mimeType: file.mimetype,
+            size: file.size,
+        }
+
+        await this.photoService.createPhoto(photo);
 
         res.status(201).json({ message: `Image created -  ${photo}`});
     }

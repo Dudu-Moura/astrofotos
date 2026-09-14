@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm"
 import { instance } from "../db/instance.db.js"
 import { photos } from "../db/schema.js"
-import type { Photo } from "../types/photo.types.js"
+import type { NewPhoto, Photo } from "../types/photo.types.js"
 
 export class PhotoRepository {
     findAll = async () => {
@@ -17,7 +17,7 @@ export class PhotoRepository {
         .where(eq(photos.id , id))
     }
 
-    create = async (photo: Photo) => {
+    create = async (photo: NewPhoto) => {
         try{
             return await instance.database
             .insert(photos)

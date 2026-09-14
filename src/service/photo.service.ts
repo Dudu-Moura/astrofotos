@@ -19,9 +19,8 @@ export class PhotoService {
         return photo;
     }
 
-    createPhoto = async (photo: Photo) => {
-        const photoDB = await this.photoRepository.create(photo);
-
-        return photoDB;
+    createPhoto = async (photo: NewPhoto) => {
+        await this.photoRepository.create(photo);
+        return;
     }
 }
