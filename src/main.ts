@@ -9,7 +9,7 @@ app.get('/health', (_: Request, res: Response) => {
     res.send({ status: 'ok' });
 })
 
-app.use('/photos', photoRouter);
+app.use('/photo', photoRouter);
 
 
 app.listen(port);

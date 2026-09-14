@@ -6,7 +6,7 @@ import { upload } from "../middlewares/upload.js";
 const router = Router();
 
 router.get('/', photoController.getPhoto);
-router.get('/:id', upload.single('photo'), photoController.getPhotoById);
-router.post('/', photoController.createPhoto);
+router.get('/:id', photoController.getPhotoById);
+router.post('/', upload.single('photo'), photoController.createPhoto);
 
 export default router;
