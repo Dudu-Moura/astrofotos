@@ -31,10 +31,10 @@ export class PhotoController {
             fileName: file.filename,
             mimeType: file.mimetype,
             size: file.size,
-        }
+        };
 
         await this.photoService.createPhoto(photo);
 
-        res.status(201).json({ message: `Image created -  ${photo}`});
+        res.status(201).json({ message: 'Image created', photo });
     }
 }

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>AstroFotos - Upload</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 480px;
+      margin: 40px auto;
+      padding: 0 16px;
+      color: #222;
+    }
+    h1 { font-size: 1.4rem; }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    button {
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    #preview {
+      max-width: 100%;
+      max-height: 200px;
+      display: none;
+    }
+    #result {
+      margin-top: 16px;
+      white-space: pre-wrap;
+      background: #f4f4f4;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 0.85rem;
+      display: none;
+    }
+    #result.error {
+      background: #fdecea;
+      color: #611a15;
+    }
+  </style>
+</head>
+<body>
+  <h1>Upload de foto</h1>
+  <form id="upload-form">
+    <input type="file" id="photo" name="photo" accept="image/*" required />
+    <img id="preview" alt="Pré-visualização" />
+    <button type="submit">Enviar</button>
+  </form>
+  <pre id="result"></pre>
+
+  <script>
+    const form = document.getElementById('upload-form');
+    const fileInput = document.getElementById('photo');
+    const preview = document.getElementById('preview');
+    const result = document.getElementById('result');
+
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (!file) {
+        preview.style.display = 'none';
+        return;
+      }
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('photo', file);
+
+      result.style.display = 'block';
+      result.classList.remove('error');
+      result.textContent = 'Enviando...';
+
+      try {
+        const response = await fetch('/photo', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Erro ao enviar a foto');
+        }
+
+        result.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        result.classList.add('error');
+        result.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>
