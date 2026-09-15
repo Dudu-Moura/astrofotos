@@ -6,7 +6,7 @@ export const generateDirectoryForImages = async (file: NewPhoto, miniature: Buff
     const absolutePath = path.join(`/app`, `/.uploads/${file.originalName.substring(0, file.originalName.indexOf('.'))}`);
     
     await fs.mkdir(absolutePath);
-    await fs.writeFile(`${absolutePath}/${file.originalName}`, miniature, 'base64');
+    await fs.writeFile(`${absolutePath}/${file.originalName.substring(0, file.originalName.indexOf('.'))}`, miniature, 'base64');
     
     await fs.rename(file.path, `${absolutePath}/${file.originalName}1`);
 
