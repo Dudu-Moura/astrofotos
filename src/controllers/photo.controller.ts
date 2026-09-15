@@ -2,10 +2,11 @@ import type { Request, Response } from "express";
 import type { PhotoService } from "../service/photo.service.js";
 import { readMultiplePhoto } from "../utils/readMultiplePhoto.util.js";
 import { readPhoto } from "../utils/readPhoto.util.js";
-import { generateVariants, miniatureFormat, webFormat } from "../utils/generateVariants.util.js";
+import { generateVariants } from "../utils/generateVariants.util.js";
 import { generateDirectoryForImages } from "../utils/generateDirectoryForImages.util.js";
 import { generateMultipleVariants } from "../utils/generateMultipleVariants.util.js";
 import { generateMultipleDirectoryForImages } from "../utils/generateMultipleDirectoryForImages.util.js";
+import { miniatureFormat, webFormat } from "../constants/format.constants.js";
 
 
 export class PhotoController {
