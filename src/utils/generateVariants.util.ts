@@ -1,7 +1,7 @@
 import type { NewPhoto } from "../types/photo.types.js";
 import sharp from 'sharp'
 
-type Format = {
+export type Format = {
     id: string
     width: number,
     height: number,

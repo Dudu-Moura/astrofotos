@@ -1,13 +1,11 @@
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response } from "express";
 import type { PhotoService } from "../service/photo.service.js";
-import fs, { readFile } from 'node:fs/promises';
-import exifr from 'exifr';
-import sharp from 'sharp';
-import path from 'node:path';
 import { readMultiplePhoto } from "../utils/readMultiplePhoto.util.js";
 import { readPhoto } from "../utils/readPhoto.util.js";
 import { generateVariants, miniatureFormat, webFormat } from "../utils/generateVariants.util.js";
 import { generateDirectoryForImages } from "../utils/generateDirectoryForImages.util.js";
+import { generateMultipleVariants } from "../utils/generateMultipleVariants.util.js";
+import { generateMultipleDirectoryForImages } from "../utils/generateMultipleDirectoryForImages.util.js";
 
 
 export class PhotoController {
@@ -67,6 +65,10 @@ export class PhotoController {
             size: f.size,
         }));
 
+        const variants = await generateMultipleVariants(photos, [miniatureFormat, webFormat]);
+
+        await generateMultipleDirectoryForImages(photos, variants);
+        
         await this.photoService.createMultiplePhotos(photos);
 
         res.status(201).json({ message: `${photos.length} images created` });
