@@ -1,7 +1,7 @@
-import type { Photo } from "../types/photo.types.js";
+import type { NewPhoto } from "../types/photo.types.js";
 import sharp from 'sharp'
 
-export const generateMiniature = async (file: Photo) => {
+export const generateMiniature = async (file: NewPhoto) => {
     const miniatureFormat = await sharp(file.path)
             .resize({
                 width: 300,
