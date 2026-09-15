@@ -6,7 +6,7 @@ import sharp from 'sharp';
 import path from 'node:path';
 import { readMultiplePhoto } from "../utils/readMultiplePhoto.util.js";
 import { readPhoto } from "../utils/readPhoto.util.js";
-import { generateMiniature, generateVariants, miniatureFormat, webFormat } from "../utils/generateVariants.util.js";
+import { generateVariants, miniatureFormat, webFormat } from "../utils/generateVariants.util.js";
 import { generateDirectoryForImages } from "../utils/generateDirectoryForImages.util.js";
 
 
@@ -49,12 +49,12 @@ export class PhotoController {
             size: file.size,
         };
 
-        const [ miniature, web ] = await generateVariants(photo, [miniatureFormat, webFormat]);
+        const variants = await generateVariants(photo, [miniatureFormat, webFormat]);
 
-        await generateDirectoryForImages(photo, miniatureFormat);
+        await generateDirectoryForImages(photo, variants);
         await this.photoService.createPhoto(photo);
 
-        res.status(201).json({ message: `Image created -  ${JSON.stringify(photo)}`});
+        res.status(201).json({ message: `Image created - ${JSON.stringify(photo.originalName)}`});
     }
 
     createMultiplePhotos = async (req: Request, res: Response) => {
