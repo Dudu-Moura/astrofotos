@@ -6,7 +6,7 @@ import sharp from 'sharp';
 import path from 'node:path';
 import { readMultiplePhoto } from "../utils/readMultiplePhoto.util.js";
 import { readPhoto } from "../utils/readPhoto.util.js";
-import { generateMiniature } from "../utils/generateMiniature.util.js";
+import { generateMiniature, generateVariants, miniatureFormat, webFormat } from "../utils/generateVariants.util.js";
 import { generateDirectoryForImages } from "../utils/generateDirectoryForImages.util.js";
 
 
@@ -49,7 +49,7 @@ export class PhotoController {
             size: file.size,
         };
 
-        const miniatureFormat = await generateMiniature(photo);
+        const [ miniature, web ] = await generateVariants(photo, [miniatureFormat, webFormat]);
 
         await generateDirectoryForImages(photo, miniatureFormat);
         await this.photoService.createPhoto(photo);
