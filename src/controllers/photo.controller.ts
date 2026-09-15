@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
 import type { PhotoService } from "../service/photo.service.js";
 import fs, { readFile } from 'node:fs/promises';
-import exifr from 'exifr'
-import sharp from 'sharp'
-import path from 'node:path'
+import exifr from 'exifr';
+import sharp from 'sharp';
+import path from 'node:path';
 
 
 export class PhotoController {
