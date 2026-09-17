@@ -11,5 +11,5 @@ export const webFormat: Format = {
     id: 'W',
     width: 1600,
     height: 1600,
-    quality: 100
+    quality: 95
 }

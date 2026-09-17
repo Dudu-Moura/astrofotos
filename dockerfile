@@ -14,6 +14,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
+RUN mkdir -p /app/.uploads && chown -R node:node /app
+USER node
 CMD ["npm", "run", "dev"]
 
 #===============PROD ENV==========#
@@ -22,6 +24,9 @@ WORKDIR /app
 
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/node_modules ./node_modules
+
+RUN mkdir -p /app/.uploads && chown -R node:node /app
+USER node
 
 EXPOSE 3000
 
