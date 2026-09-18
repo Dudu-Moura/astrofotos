@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   api:
     build: .
@@ -7,9 +5,17 @@ services:
       - "3000:3000"
     env_file:
       - .env
+    depends_on:
+      - redis
     volumes:
       - image_data:/app/.uploads
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+
 volumes:
     image_data:
+    redis_data:
 
-      
