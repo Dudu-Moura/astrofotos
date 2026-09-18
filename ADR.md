@@ -311,3 +311,8 @@ O schema Drizzle é a única fonte de verdade sobre a forma de uma foto. Uma col
 
 ---
 
+## 9. Como registrar uma nova decisão
+
+Ao tomar uma decisão de arquitetura, adicione uma seção `ADR-00N` seguindo o mesmo formato: **contexto → decisão → alternativas consideradas → consequências**. A seção de alternativas é a mais valiosa do documento: é ela que evita que uma decisão seja revertida por alguém que não conhecia o motivo original.
+
+Decisões superadas não são apagadas — mudam de status para `substituído pelo ADR-00X`, preservando o histórico do raciocínio.

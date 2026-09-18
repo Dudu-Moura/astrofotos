@@ -13,23 +13,18 @@ export class PhotoController {
     constructor(private photoService: PhotoService){};
 
     getPhoto = async (_: Request, res: Response) => {
-        const files = await this.photoService.getPhotos();
-
-        const { photos, metadatas } = await readMultiplePhoto(files);
+        const { photos, metadatas, files } = await this.photoService.getPhotos();
 
         res.status(200).json({
-            photos: photos.map( p => p.toString('base64')),
+            photos: photos.map(p => p.toString('base64')),
             metadatas: metadatas,
             mimeType: files.map(f => f.mimeType)
         })
-
     }
 
     getPhotoById = async (req: Request, res: Response) => {
         const id = String(req.params.id);
-        const file = await this.photoService.getPhotoById(id);
-
-        const { photo, metadata } = await readPhoto(file);
+        const { photo, metadata, file } = await this.photoService.getPhotoById(id);
 
         res.status(200).json({
             photo: photo.toString('base64'), 
@@ -40,37 +35,16 @@ export class PhotoController {
 
     createPhoto = async (req: Request, res: Response) => {
         const file = req.file!;
-        const photo = {
-            path: file.path,
-            originalName: file.originalname,
-            fileName: file.filename,
-            mimeType: file.mimetype,
-            size: file.size,
-        };
 
-        const variants = await generateVariants(photo, [miniatureFormat, webFormat]);
-
-        await generateDirectoryForImages(photo, variants);
-        await this.photoService.createPhoto(photo);
+        const photo = await this.photoService.createPhoto(file);
 
         res.status(201).json({ message: `Image created - ${JSON.stringify(photo.originalName)}`});
     }
 
     createMultiplePhotos = async (req: Request, res: Response) => {
         const files = req.files as Express.Multer.File[];
-        const photos = files.map(f => ({
-            path: f.path,
-            originalName: f.originalname,
-            fileName: f.filename,
-            mimeType: f.mimetype,
-            size: f.size,
-        }));
 
-        const variants = await generateMultipleVariants(photos, [miniatureFormat, webFormat]);
-
-        await generateMultipleDirectoryForImages(photos, variants);
-        
-        await this.photoService.createMultiplePhotos(photos);
+        const photos = await this.photoService.createMultiplePhotos(files);
 
         res.status(201).json({ message: `${photos.length} images created` });
     }
