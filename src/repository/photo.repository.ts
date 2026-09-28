@@ -18,7 +18,6 @@ export class PhotoRepository {
     }
 
     create = async (photo: NewPhoto) => {
-        try{
             return await instance.database
             .insert(photos)
             .values({
@@ -29,13 +28,6 @@ export class PhotoRepository {
                 path: photo.path,
             })
             .returning()
-        }
-        catch(err){
-            if(err instanceof Error){
-                console.error(`ERROR: ${err.message}`);
-            }
-            console.error(`An unexpected database error ocurred`);
-        }
     }
 
     createMultiple = async (newPhotos: NewPhoto[]) => {

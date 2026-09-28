@@ -1,7 +1,6 @@
 import { Router } from "express";
-import { PhotoController } from "../controllers/photo.controller.js";
 import { photoController } from "../container.js";
-import { upload } from "../middlewares/upload.js";
+import { upload } from "../middlewares/upload.middleware.js";
 
 const router = Router();
 
