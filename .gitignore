@@ -4,4 +4,6 @@ dist/
 /.uploads
 /generated/prisma
 
+/.vitest/
+
 .env
