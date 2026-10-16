@@ -39,15 +39,16 @@ export class PhotoService {
             mimeType: file.mimetype,
             size: file.size,
         };
-        const [createdPhoto] = await this.photoRepository.create(photo);
-
-        if(!createdPhoto){
-            throw new Error(`Error in creating image`);
-        }
         
         const variants = await generateVariants(photo, [miniatureFormat, webFormat]);
         
-        await generateDirectoryForImages(createdPhoto, variants);
+        await generateDirectoryForImages(photo, variants);
+        
+        const [createdPhoto] = await this.photoRepository.create(photo);
+        
+        if(!createdPhoto){
+            throw new Error(`Error in creating image`);
+        }
         
         return photo;
     }

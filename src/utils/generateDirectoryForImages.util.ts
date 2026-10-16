@@ -15,8 +15,11 @@ export const generateDirectoryForImages = async (
     await fs.mkdir(absolutePath);
     await Promise.all(variants.map(v => fs.writeFile(`${absolutePath}/${file.originalName.substring(0, file.originalName.indexOf('.'))}${v.id}`, v.buffer , 'base64')));
     
-    await fs.rename(file.path, `${absolutePath}/${file.originalName}1`);
+    const newPath = `${absolutePath}/${file.originalName}P`;
+    await fs.rename(file.path, newPath);
+
+    file.path = newPath;
 
     console.timeEnd('Folder generation');
-    return
+    return 
 }
