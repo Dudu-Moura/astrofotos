@@ -3,9 +3,14 @@ import fs from 'node:fs/promises';
 import exifr from 'exifr'
 
 export const readPhoto = async (file: Photo) => {
-    const metadata = await exifr.parse(`.uploads/${file.fileName}`);
-
     const photo = await fs.readFile(file.path);
+
+    if(photo.length === 0){
+        throw new Error(`Cannot read empty file`);
+    }
+
+    const metadata = await exifr.parse(file.path);
+
 
     return { photo, metadata }; 
 }
